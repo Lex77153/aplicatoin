@@ -47,17 +47,17 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   bool _isGridView = false; // Переключатель между List и Grid
 
-  // Метод для Pull-to-Refresh (добавление нового элемента в индекс 0)[cite: 1]
+
   Future<void> _handleRefresh() async {
-    await Future.delayed(const Duration(milliseconds: 1500)); // задержка 1.5 сек[cite: 1]
+    await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       final newId = DateTime.now().millisecondsSinceEpoch.toString();
       _products.insert(
         0,
         Product(
           id: newId,
-          title: 'New Item $newId',
-          category: 'General',
+          title: 'Polaroid OneStep 2',
+          category: 'Electronics',
           rating: 5.0,
           price: 19.99,
           imageUrl: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500',
@@ -66,7 +66,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
     });
   }
 
-  // Полное восстановление исходного каталога (всех 4 товаров)[cite: 1]
+  // Полное восстановление исходного каталога[cite: 1]
   void _resetCatalog() {
     setState(() {
       _products.clear();
@@ -136,6 +136,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   // Вид режима списка (ListView.separated)[cite: 1]
   Widget _buildListView() {
     return ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(), // Включает скролл для Pull-to-Refresh
       itemCount: _products.length,
       separatorBuilder: (context, index) => const Divider(height: 1),
       itemBuilder: (context, index) {
@@ -148,6 +149,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
   // Вид режима сетки (GridView.builder)[cite: 1]
   Widget _buildGridView() {
     return GridView.builder(
+      physics: const AlwaysScrollableScrollPhysics(), // Включает скролл для Pull-to-Refresh
       padding: const EdgeInsets.all(8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -279,7 +281,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
         children: [
           const Icon(Icons.inbox, size: 80, color: Colors.grey),
           const SizedBox(height: 16),
-          const Text('Catalog is Empty', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)), //[cite: 1]
+          const Text('Catalog is Empty', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: _resetCatalog, // Кнопка восстановления[cite: 1]
